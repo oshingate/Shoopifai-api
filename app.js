@@ -4,13 +4,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// importing routers
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var productCategory = require('./routes/productCategory');
+
+//imports
 const mongoose = require('mongoose');
 
 var app = express();
-
+//databvase connection
 mongoose.connect(
   'mongodb://localhost:27017/capstone-1',
   { useNewUrlParser: true, useUnifiedTopology: true },
@@ -27,6 +31,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//routes handler
 
 app.use('/api/v1', indexRouter);
 app.use('/api/v1/users', usersRouter);
