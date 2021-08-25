@@ -6,7 +6,7 @@ const Product = require('../models/Product');
 var router = express.Router();
 
 /* create new Product */
-router.post('/', async function (req, res, next) {
+router.post('/', Auth.isLoggedIn, async function (req, res, next) {
   try {
     let data = req.body;
     data.tags = data.tags.split(',').map((ele) => {
@@ -35,7 +35,7 @@ router.post('/', async function (req, res, next) {
 
 //delete product
 
-router.delete('/:slug', async function (req, res, next) {
+router.delete('/:slug', Auth.isLoggedIn, async function (req, res, next) {
   let slug = req.params.slug;
 
   try {

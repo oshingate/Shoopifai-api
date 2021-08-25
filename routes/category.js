@@ -1,6 +1,7 @@
 var express = require('express');
-var Category = require('../models/Category');
-var Auth = require('../middlewares/Auth');
+
+var auth = require('../middlewares/Auth');
+const Category = require('../models/Category');
 
 var router = express.Router();
 
@@ -11,12 +12,29 @@ router.get('/', async function (req, res, next) {
 });
 
 //create category
-router.post('/', Auth.isLoggedIn, async function (req, res, next) {
+router.post('/', auth.isLoggedIn, async function (req, res, next) {
   try {
     let data = req.body;
     let createdCategory = await Category.create(data);
 
     res.json({ isSucess: true, productCategory: createdCategory });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//delete Category
+
+router.delete('/:slug', auth.isLoggedIn, async function (req, res, next) {
+  let slug = req.params.slug;
+  try {
+    let category = await Category.findOne({ slug });
+    if (!category) {
+      return res.status(400).json({ error: 'Category not found' });
+    }
+    let deletedCategory = await Category.findOneAndDelete({ slug });
+
+    res.status(200).json({ category: deletedCategory });
   } catch (error) {
     next(error);
   }
