@@ -1,19 +1,20 @@
 var express = require('express');
-var ProductCategory = require('../models/ProductCategory');
+var Category = require('../models/Category');
+var Auth = require('../middlewares/Auth');
 
 var router = express.Router();
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
-  let categories = await ProductCategory.find({});
+  let categories = await Category.find({});
   res.json({ success: true, productCategories: categories });
 });
 
 //create category
-router.post('/', async function (req, res, next) {
+router.post('/', Auth.isLoggedIn, async function (req, res, next) {
   try {
     let data = req.body;
-    let createdCategory = await ProductCategory.create(data);
+    let createdCategory = await Category.create(data);
 
     res.json({ isSucess: true, productCategory: createdCategory });
   } catch (error) {
