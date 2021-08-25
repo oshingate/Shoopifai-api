@@ -3,14 +3,20 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+require('dotenv').config();
+
+// importing routers
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var productCategory = require('./routes/productCategory');
+var categoryRouter = require('./routes/category');
+var productRouter = require('./routes/product');
+
+//imports
 const mongoose = require('mongoose');
 
 var app = express();
-
+//databvase connection
 mongoose.connect(
   'mongodb://localhost:27017/capstone-1',
   { useNewUrlParser: true, useUnifiedTopology: true },
@@ -28,9 +34,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//routes handler
+
 app.use('/api/v1', indexRouter);
 app.use('/api/v1/users', usersRouter);
-app.use('/api/v1/productCategory', productCategory);
+app.use('/api/v1/category', categoryRouter);
+app.use('/api/v1/product', productRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
