@@ -1,4 +1,5 @@
 var express = require('express');
+const auth = require('../middlewares/Auth');
 const User = require('../models/User');
 var router = express.Router();
 
@@ -34,7 +35,7 @@ router.post('/signup', async function (req, res, next) {
 router.post('/login', async function (req, res, next) {
   let { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({
+    return res.json({
       error: { email: 'Email is required', password: 'Password is required' },
     });
   }
@@ -42,13 +43,11 @@ router.post('/login', async function (req, res, next) {
     let user = await User.findOne({ email: email });
 
     if (!user) {
-      return res.status(400).json({ error: { email: 'No User found !!!' } });
+      return res.json({ error: { email: 'No User found !!!' } });
     }
     let result = await user.verifyPassword(password);
     if (!result) {
-      return res
-        .status(400)
-        .json({ error: { password: 'Password is incorrect !!!' } });
+      return res.json({ error: { password: 'Password is incorrect !!!' } });
     }
 
     let token = await user.createToken();
@@ -57,6 +56,10 @@ router.post('/login', async function (req, res, next) {
   } catch (error) {
     next(error);
   }
+});
+
+router.get('/me', auth.isLoggedIn, async function (req, res, next) {
+  res.json({ user: req.user });
 });
 
 module.exports = router;

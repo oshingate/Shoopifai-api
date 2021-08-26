@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require('dotenv').config();
+var cors = require('cors');
 
 // importing routers
 
@@ -16,6 +17,7 @@ var productRouter = require('./routes/product');
 const mongoose = require('mongoose');
 
 var app = express();
+app.use(cors());
 //databvase connection
 mongoose.connect(
   'mongodb://localhost:27017/capstone-1',
