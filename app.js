@@ -11,7 +11,7 @@ var cors = require('cors');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var categoryRouter = require('./routes/category');
-var productRouter = require('./routes/product');
+var productsRouter = require('./routes/products');
 
 //imports
 const mongoose = require('mongoose');
@@ -20,7 +20,7 @@ var app = express();
 app.use(cors());
 //databvase connection
 mongoose.connect(
-  'mongodb://localhost:27017/capstone-1',
+  process.env.MONGO_LOCAL_URL,
   { useNewUrlParser: true, useUnifiedTopology: true },
   function (err) {
     console.log('mongodb connected ?', err ? false : true);
@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1', indexRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/category', categoryRouter);
-app.use('/api/v1/product', productRouter);
+app.use('/api/v1/products', productsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

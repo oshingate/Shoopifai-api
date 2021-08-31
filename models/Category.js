@@ -6,7 +6,7 @@ let Schema = mongoose.Schema;
 CategorySchema = new Schema({
   name: { type: String, unique: true },
   slug: { type: String },
-  tax_percentage: Number,
+  tax_percentage: { type: Number, default: 18 },
   products: [{ type: mongoose.Types.ObjectId, ref: 'Product' }],
 });
 

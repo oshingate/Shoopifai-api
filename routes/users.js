@@ -7,7 +7,7 @@ var router = express.Router();
 router.post('/signup', async function (req, res, next) {
   let data = req.body;
   if (!data.username || !data.password || !data.email) {
-    return res.status(400).json({
+    return res.json({
       error: {
         username: 'username cant be empty',
         email: 'email cant be empty',
@@ -19,7 +19,9 @@ router.post('/signup', async function (req, res, next) {
   try {
     let user = await User.findOne({ email: data.email });
     if (user) {
-      return res.status(400).json({ error: { email: 'User already exists' } });
+      return res.json({
+        error: { email: 'User already exists', username: '', password: '' },
+      });
     }
 
     let newUser = await User.create(data);
@@ -43,11 +45,13 @@ router.post('/login', async function (req, res, next) {
     let user = await User.findOne({ email: email });
 
     if (!user) {
-      return res.json({ error: { email: 'No User found !!!' } });
+      return res.json({ error: { email: 'No User found !!!', password: '' } });
     }
     let result = await user.verifyPassword(password);
     if (!result) {
-      return res.json({ error: { password: 'Password is incorrect !!!' } });
+      return res.json({
+        error: { email: '', password: 'Password is incorrect !!!' },
+      });
     }
 
     let token = await user.createToken();

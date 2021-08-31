@@ -5,7 +5,7 @@ const Category = require('../models/Category');
 
 var router = express.Router();
 
-/* GET home page. */
+/* get all categories. */
 router.get('/', async function (req, res, next) {
   let categories = await Category.find({});
   res.json({ success: true, productCategories: categories });
@@ -15,9 +15,16 @@ router.get('/', async function (req, res, next) {
 router.post('/', auth.isLoggedIn, async function (req, res, next) {
   try {
     let data = req.body;
+    data.name = data.name.toLowerCase();
+
+    let category = await Category.findOne({ name: data.name });
+    if (category) {
+      return res.json({ error: 'Category already exists' });
+    }
+
     let createdCategory = await Category.create(data);
 
-    res.json({ isSucess: true, productCategory: createdCategory });
+    return res.json({ isSucess: true, productCategory: createdCategory });
   } catch (error) {
     next(error);
   }
