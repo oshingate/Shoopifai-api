@@ -10,6 +10,7 @@ let userSchema = new Schema({
   password: { type: String },
   bio: { type: String, default: null },
   image: { type: String, default: null },
+  listedProducts: [{ type: mongoose.Types.ObjectId, ref: 'Product' }],
 });
 
 userSchema.pre('save', async function (req, res, next) {
@@ -40,6 +41,7 @@ userSchema.methods.createToken = async function () {
       username: this.username,
       bio: this.bio,
       image: this.image,
+      _id: this._id,
     };
 
     let token = await jwt.sign(payload, process.env.SECRET_TOKEN);

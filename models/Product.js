@@ -22,13 +22,20 @@ ProductSchema = new Schema({
   is_taxable: { type: Boolean, default: false },
   is_physical: { type: Boolean, default: true },
   tags: [{ type: String }],
-  collections: [{ type: String }],
+  collections: { type: String },
   category_id: { type: mongoose.Types.ObjectId, ref: 'Category' },
+  sku: { type: String },
+  barcode: { type: String },
+  has_variants: { type: Boolean, default: false },
 });
 
 ProductSchema.pre('save', async function (req, res, next) {
   try {
     this.slug = slugger(this.name);
+    if (this.vendor === '') {
+      this.vendor = req.user.username;
+    }
+    console.log(req.user);
 
     next();
   } catch (error) {
