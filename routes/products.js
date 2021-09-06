@@ -45,6 +45,11 @@ router.post('/', Auth.isLoggedIn, async function (req, res, next) {
       return res.json({ error: 'Product already exists' });
     }
 
+    // if (!data.has_variants) {
+    //   delete data.variants;
+    // } else {
+    // }
+
     let newProduct = await Product.create(data);
 
     let updatedCategory = await Category.findByIdAndUpdate(
@@ -53,7 +58,7 @@ router.post('/', Auth.isLoggedIn, async function (req, res, next) {
       },
       { $push: { products: newProduct._id } }
     );
-    let updatedCollection = await Collection.findByIdAndUpdate(
+    let updatedCollection = await Collection.findOneAndUpdate(
       {
         name: data.collections,
       },
