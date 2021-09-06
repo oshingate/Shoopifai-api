@@ -22,7 +22,7 @@ var app = express();
 app.use(cors());
 //databvase connection
 mongoose.connect(
-  process.env.MONGO_LOCAL_URL,
+  process.env.MONGO_URL,
   { useNewUrlParser: true, useUnifiedTopology: true },
   function (err) {
     console.log('mongodb connected ?', err ? false : true);
