@@ -13,6 +13,7 @@ var usersRouter = require('./routes/users');
 var categoryRouter = require('./routes/category');
 var productsRouter = require('./routes/products');
 var collectionRouter = require('./routes/collection');
+var variantRouter = require('./routes/variant');
 
 //imports
 const mongoose = require('mongoose');
@@ -44,6 +45,7 @@ app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/category', categoryRouter);
 app.use('/api/v1/products', productsRouter);
 app.use('/api/v1/collection', collectionRouter);
+app.use('/api/v1/variant', variantRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
